@@ -41,17 +41,18 @@
 5. Calcolare il totale degli ospiti paganti
 
 	
-	SELECT COUNT(*) 
-	
-	FROM `paganti`;
+
+	SELECT COUNT(`id`)	FROM `paganti` 	
+	WHERE `ospite_id` IS NOT NULL; 
 
 
 6.  Qual è il prezzo massimo pagato?
 
 	SELECT MAX(`price`) 
 
-	FROM `pagamenti`;
-
+	FROM `pagamenti`
+	
+	WHERE `status` = 'Accepted';
 
 7. Seleziona gli ospiti riconosciuti con patente e nati nel 1975
 
@@ -59,7 +60,7 @@
 
 	FROM `ospiti`	
  
-	WHERE `document_type` = 'Driver Licence' AND `date_of_birth` LIKE('1975%');
+	WHERE `document_type` = 'Driver License' AND `date_of_birth` LIKE '1975%';
 
 8. Quanti posti letto ha l’hotel in totale?
 
