@@ -64,9 +64,6 @@
 
 6) Fai la somma di tutti i prezzi delle prenotazioni per le stanze del primo piano
 
-	SELECT SUM(`price`)
-
-	FROM `pagamenti`
 
 
 7) Prendi i dati di fatturazione per la prenotazione con id=7
