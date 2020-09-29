@@ -62,8 +62,24 @@
 	WHERE YEAR(prenotazioni.created_at) = 2018 AND MONTH(prenotazioni.created_at) = 05
 
 
-6) Fai la somma di tutti i prezzi delle prenotazioni per le stanze del primo piano
 
+
+
+SELECT ospiti.name, ospiti.lastname, pagamenti.price, paganti.name as 'Nome_Pagante', prenotazioni.created_at as 'Data Prenotazione'FROM ospitiRIGHT JOIN paganti on ospiti.id = paganti.ospite_idINNER JOIN pagamenti on pagamenti.pagante_id = paganti.idINNER JOIN prenotazioni on prenotazioni.id = pagamenti.prenotazione_idWHERE YEAR(prenotazioni.created_at) = '2018' and MONTH(prenotazioni.created_at) = '05'; 
+
+
+6) Fai la somma di tutti i prezzi delle prenotazioni per le stanze del primo piano
+	
+	SELECT SUM(pagamenti.price)
+FROM `prenotazioni`
+INNER JOIN `stanze`
+ON stanze.id = prenotazioni.stanze_id
+INNER JOIN `pagamenti`
+ON pagamenti.prenotazione_id = prenotazioni.id 
+WHERE stanze.floor = 1
+	
+
+	
 
 
 7) Prendi i dati di fatturazione per la prenotazione con id=7
@@ -96,6 +112,59 @@
 
 	WHERE prenotazioni.id = 7;
 
+
+************************* terza parte *********************************
+
+
+1. Fai un'analisi per vedere se ci sono ore in cui le prenotazioni sono più frequenti.
+
+        SELECT COUNT(HOUR(prenotazioni.created_at)),
+        HOUR(prenotazioni.created_at) 
+
+        FROM `prenotazioni` 
+
+        GROUP BY HOUR(prenotazioni.created_at);
+
+    2. Le stanze sono state tutte prenotate almeno una volta? (Visualizzare le stanze non ancora prenotate)
+
+        SELECT stanze.room_number, prenotazioni.id, prenotazioni.stanza_id
+  	  FROM `stanze`
+   	  LEFT JOIN `prenotazioni`
+   	  ON stanze.id = prenotazioni.stanza_id
+   	  WHERE prenotazioni.stanza_id IS NULL
+
+    3. Come si chiamano gli ospiti che hanno fatto più di due prenotazioni?
+
+        SELECT prenotazioni_has_ospiti.ospite_id, ospiti.name, ospiti.lastname 
+
+        FROM `prenotazioni_has_ospiti` 
+
+        INNER JOIN `ospiti`
+
+        ON prenotazioni_has_ospiti.ospite_id = ospiti.id 
+
+        GROUP BY prenotazioni_has_ospiti.ospite_id 
+
+        HAVING COUNT(prenotazioni_has_ospiti.ospite_id) > 2;
+
+
+
+
+	SELECT COUNT(prenotazioni_has_ospiti.prenotazione_id), ospiti.name, ospiti.lastname
+   	
+	FROM `ospiti`
+   	
+	INNER JOIN `prenotazioni_has_ospiti`
+   	
+	ON ospiti.id = prenotazioni_has_ospiti.ospite_id
+   	
+	INNER JOIN `prenotazioni`
+   	
+	ON prenotazioni.id = prenotazioni_has_ospiti.prenotazione_id
+   	
+	GROUP BY ospiti.id
+   	
+	HAVING COUNT(prenotazioni_has_ospiti.prenotazione_id) > 2;
 
 
 
